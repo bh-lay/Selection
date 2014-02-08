@@ -56,7 +56,7 @@ Selection
     //移动光标点
     util.Selection(textarea,12);
     //选择字符
-    util.Selection(textarea,12，23);
+    util.Selection(textarea,12,23);
 ```
 
 ##2.3、插入字符util.insertTxt
