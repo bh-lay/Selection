@@ -3,9 +3,10 @@
  * 
  * @github: https://github.com/bh-lay/Selection
  * @introduction: https://github.com/bh-lay/Selection/blob/master/README.md
+ * @modified 2014-3-25 19:42
  *  
  */
-
+window.util = window.util || {};
 (function(exports){
 	//set
 	var setPosition = (function() {
@@ -34,7 +35,7 @@
 	//get
 	var getPosition = (function(){
 		var textarea = document.createElement("textarea");
-		if(!textarea.createTextRange){ //not IE
+		if(typeof(textarea.selectionStart)=='number'){ //not IE
 			return function(tarea){
 				return [tarea.selectionStart,tarea.selectionEnd];
 			}
@@ -70,6 +71,8 @@
 			}
 		}
 	})();
+	
+	
 	/**	 
 	 * @method Selection set or get texarea position
 	 * @param {Object} textarea jquery dom
@@ -125,23 +128,29 @@
 	//exports
 	exports.insertTxt = insertTxt;
 	exports.Selection = Selection;
-	
-	//exports for jquery
-	if(jQuery && jQuery.fn){
-		jQuery.fn.Selection = function(){
-			var tarea = this[0];
-			if(tarea.tagName != 'TEXTAREA'){
-				return this
-			}else if(arguments['length'] > 0){
-				setPosition(tarea,arguments[0],arguments[1]);
-				return this
-			}else{
-				return getPosition(tarea);
-			}
-		};
-		jQuery.fn.insertTxt = function(txt,start,end){
-			insertTxt(this[0],txt,start,end);
-			return this
-		};
-	}
 })(window.util);
+
+
+//exports for jquery
+if(window.jQuery && window.jQuery.fn){
+	jQuery.fn.Selection = function(){
+		var tarea = this[0];
+		if(tarea.tagName != 'TEXTAREA'){
+			return this
+		}else if(arguments['length'] > 0){
+			util.Selection(tarea,arguments[0],arguments[1]);
+			return this
+		}else{
+			return util.Selection(tarea);
+		}
+	};
+	jQuery.fn.insertTxt = function(txt,start,end){
+		util.insertTxt(this[0],txt,start,end);
+		return this
+	};
+}
+//exports for commonJS
+window.define && window.define(function(require,exports){
+	exports.insertTxt = util.insertTxt;
+	exports.Selection = util.Selection;
+});
