@@ -2,15 +2,44 @@
  * @author bh-lay
  * 
  * @github: https://github.com/bh-lay/Selection
- * @introduction: https://github.com/bh-lay/Selection/blob/master/README.md
- * @modified 2014-3-25 19:42
+ * 
+ * @modified 2014-6-7 20:16
  *  
  */
 window.util = window.util || {};
-(function(exports){
+(function(global,doc,factoryFn){
+	var factory = factoryFn(doc);
+	//exports for jquery
+	if(global.jQuery && global.jQuery.fn){
+		jQuery.fn.Selection = function(){
+			var tarea = this[0];
+			if(tarea.tagName != 'TEXTAREA'){
+				return this
+			}else if(arguments['length'] > 0){
+				factory.setPosition(tarea,arguments[0],arguments[1]);
+				return this
+			}else{
+				return factory.getPosition(tarea);
+			}
+		};
+		jQuery.fn.insertTxt = function(txt,start,end){
+			factory.insertTxt(this[0],txt,start,end);
+			return this
+		};
+	}
+	
+	//exports for commonJS
+	global.define && global.define(function(require,exports){
+		exports.insertTxt = factory.insertTxt;
+		exports.Selection = factory.Selection;
+	});
+	
+	global.insertTxt = factory.insertTxt;
+	global.Selection = factory.Selection;
+})(this,document,function(doc){
 	//set
 	var setPosition = (function() {
-		var textarea = document.createElement("textarea");
+		var textarea = doc.createElement("textarea");
 		if (textarea.setSelectionRange) {//FF
 			return function(tarea,start, len) {
 				var len = len || 0;
@@ -34,7 +63,7 @@ window.util = window.util || {};
 	})();
 	//get
 	var getPosition = (function(){
-		var textarea = document.createElement("textarea");
+		var textarea = doc.createElement("textarea");
 		if(typeof(textarea.selectionStart)=='number'){ //not IE
 			return function(tarea){
 				return [tarea.selectionStart,tarea.selectionEnd];
@@ -44,10 +73,10 @@ window.util = window.util || {};
 				var start = 0,
 					 end = 0;
 				tarea.focus();
-				var sTextRange = document.selection.createRange();
+				var sTextRange = doc.selection.createRange();
 				
 				if (tarea.tagName == "TEXTAREA") {
-					var oTextRange = document.body.createTextRange();
+					var oTextRange = doc.body.createTextRange();
 					oTextRange.moveToElementText(tarea);
 					for (start = 0; oTextRange.compareEndPoints("StartToStart", sTextRange) < 0; start++) {
 						oTextRange.moveStart('character', 1);
@@ -124,33 +153,11 @@ window.util = window.util || {};
 		setPosition(tarea ,frontTxt.length + txt.length,0);
 	};
 	
-	
 	//exports
-	exports.insertTxt = insertTxt;
-	exports.Selection = Selection;
-})(window.util);
-
-
-//exports for jquery
-if(window.jQuery && window.jQuery.fn){
-	jQuery.fn.Selection = function(){
-		var tarea = this[0];
-		if(tarea.tagName != 'TEXTAREA'){
-			return this
-		}else if(arguments['length'] > 0){
-			util.Selection(tarea,arguments[0],arguments[1]);
-			return this
-		}else{
-			return util.Selection(tarea);
-		}
+	return {
+		'insertTxt' : insertTxt,
+		'Selection' : Selection,
+		'setPosition' : setPosition,
+		'getPosition' : getPosition
 	};
-	jQuery.fn.insertTxt = function(txt,start,end){
-		util.insertTxt(this[0],txt,start,end);
-		return this
-	};
-}
-//exports for commonJS
-window.define && window.define(function(require,exports){
-	exports.insertTxt = util.insertTxt;
-	exports.Selection = util.Selection;
 });
