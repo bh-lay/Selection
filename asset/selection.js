@@ -3,7 +3,7 @@
  * 
  * @github: https://github.com/bh-lay/Selection
  * 
- * @modified 2014-6-7 20:16
+ * @modified 2014-6-9 11:22
  *  
  */
 window.util = window.util || {};
@@ -40,10 +40,9 @@ window.util = window.util || {};
 	//set
 	var setPosition = (function() {
 		var textarea = doc.createElement("textarea");
-		if (textarea.setSelectionRange) {//FF
+		if (textarea.setSelectionRange) {
 			return function(tarea,start, len) {
 				var len = len || 0;
-				tarea.focus();
 				setTimeout(function(){
 					tarea.focus();
 					tarea.setSelectionRange(start,start+len);
@@ -149,7 +148,6 @@ window.util = window.util || {};
 			 endTxt = allTxt.slice(this_end);
 		tarea.value = frontTxt + txt + endTxt;
 		
-		tarea.focus();
 		setPosition(tarea ,frontTxt.length + txt.length,0);
 	};
 	
