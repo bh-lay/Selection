@@ -3,7 +3,7 @@ Selection
 #一、简介
 
 ##1.1、Selection是什么
-用来操作textarea的字符选择与获取选择状态的，对textarea插入字符操作的小类库。
+用来操作textarea的字符选择与获取选择状态的，对textarea插入字符操作的小类库。常用于社交类发布、评论类的操作。
 
 ##1.2、Selection目前有哪儿些内容？
 
