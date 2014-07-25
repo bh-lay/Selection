@@ -3,7 +3,7 @@
  * 
  * @github: https://github.com/bh-lay/Selection
  * 
- * @modified 2014-6-9 11:22
+ * @modified 2014-7-25 10:54
  *  
  */
 window.util = window.util || {};
