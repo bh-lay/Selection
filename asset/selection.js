@@ -65,7 +65,8 @@ window.util = window.util || {};
 		var textarea = doc.createElement("textarea");
 		if(typeof(textarea.selectionStart)=='number'){ //not IE
 			return function(tarea){
-				return [tarea.selectionStart,tarea.selectionEnd];
+				
+				return [tarea.selectionStart,tarea.selectionEnd,tarea.value.slice(tarea.selectionStart,tarea.selectionEnd)];
 			}
 		}else{ //IE
 			return function(tarea){
@@ -95,7 +96,7 @@ window.util = window.util || {};
 						}
 					}
 				}
-				return [start,end];
+				return [start,end,selectedTxt,tarea.value.slice(start,end)];
 			}
 		}
 	})();
