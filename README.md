@@ -16,6 +16,8 @@ Selection
 
 ---
 #二、使用
+加方框的为可选参数，如：[**end**]
+
 ##2.1、获取选择范围util.Selection
 ### 传入参数
  *  {*Object*} **dom** 原生textarea DOM对象
