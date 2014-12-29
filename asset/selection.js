@@ -3,7 +3,7 @@
  * 
  * @github: https://github.com/bh-lay/Selection
  * 
- * @modified 2014-7-25 10:54
+ * @modified 2014-12-29 15:32
  *  
  */
 window.util = window.util || {};
@@ -29,7 +29,7 @@ window.util = window.util || {};
 	}
 	
 	//exports for commonJS
-	global.define && global.define(function(require,exports){
+	global.define && define(function(require,exports){
 		exports.insertTxt = factory.insertTxt;
 		exports.Selection = factory.Selection;
 	});
