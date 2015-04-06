@@ -6,36 +6,35 @@
  * @modified 2015-04-06 10:05
  *  
  */
-window.util = window.util || {};
 (function(global,doc,factoryFn){
-	var factory = factoryFn(doc);
-	//exports for jquery
-	if(global.jQuery && global.jQuery.fn){
-		jQuery.fn.Selection = function(){
-			var tarea = this[0];
-			if(tarea.tagName != 'TEXTAREA'){
-				return this
-			}else if(arguments['length'] > 0){
-				factory.setPosition(tarea,arguments[0],arguments[1]);
-				return this
-			}else{
-				return factory.getPosition(tarea);
-			}
-		};
-		jQuery.fn.insertTxt = function(txt,start,end){
-			factory.insertTxt(this[0],txt,start,end);
-			return this
-		};
-	}
-	
-	//exports for commonJS
-	global.define && define(function(require,exports){
-		exports.insertTxt = factory.insertTxt;
-		exports.Selection = factory.Selection;
-	});
-	
-	global.insertTxt = factory.insertTxt;
-	global.Selection = factory.Selection;
+  var factory = factoryFn(doc);
+  //name space
+  global.util = global.util || {};
+  global.util.insertTxt = factory.insertTxt;
+  global.util.Selection = factory.Selection;
+  //exports for commonJS
+  global.define && define(function(require,exports){
+    exports.insertTxt = factory.insertTxt;
+    exports.Selection = factory.Selection;
+  });
+  //exports for jquery
+  (global.jQuery && global.jQuery.extend) && jQuery.extend(jQuery.fn,{
+    Selection : function(){
+      var tarea = this[0];
+      if(tarea.tagName != 'TEXTAREA'){
+        return this
+      }else if(arguments['length'] > 0){
+        factory.setPosition(tarea,arguments[0],arguments[1]);
+        return this
+      }else{
+        return factory.getPosition(tarea);
+      }
+    },
+    insertTxt : function(txt,start,end){
+      factory.insertTxt(this[0],txt,start,end);
+      return this
+    }
+  });
 })(this,document,function(doc){
   //检测浏览器环境的临时dom
   var test_textarea = doc.createElement("textarea"),
@@ -102,7 +101,7 @@ window.util = window.util || {};
     getPosition : getPosition,
     /**
      * @method 设置or获取光标位置
-     * @param {Object} textarea jquery dom
+     * @param {Object} dom
      * @param {Number} [start]
      * @param {Number} [end]
      * 
@@ -120,7 +119,7 @@ window.util = window.util || {};
     },
     /**	 
      * @method 插入文本
-     * @param {Object} dom jquery dom
+     * @param {Object} dom
      * @param {String} text
      * @param {Number} [start]
      * @param {Number} [end]
@@ -130,8 +129,9 @@ window.util = window.util || {};
       if(tarea.tagName != 'TEXTAREA' || typeof(txt) == 'undefined'){
         return
       }
-      var txt = txt.toString();
-      var this_start,this_end;
+      var txt = txt.toString(),
+          this_start,
+          this_end;
       if(typeof(start) == 'undefined'){
         var pos = getPosition(tarea);
 
@@ -141,7 +141,6 @@ window.util = window.util || {};
         this_start = parseInt(start);
         this_end = end || this_start;
       }
-
       var allTxt = tarea.value,
           frontTxt = allTxt.slice(0,this_start),
           endTxt = allTxt.slice(this_end);
